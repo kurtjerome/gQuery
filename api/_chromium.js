@@ -1,27 +1,20 @@
 import chrome from "chrome-aws-lambda"
 import puppeteer from "puppeteer-core"
 
-let _page = null
-
 export async function getHTML({ url, isDev }) {
     const page = await getPage(isDev)
     await page.goto(url)
     const html = await page.evaluate(() => document.documentElement.innerHTML)
+    await page.close()
 
     return html
 }
 
 async function getPage(isDev) {
-    if (_page) {
-        return _page
-    }
-
     const options = await getOptions(isDev)
     const browser = await puppeteer.launch(options)
 
-    _page = await browser.newPage()
-
-    return _page
+    return await browser.newPage()
 }
 
 async function getOptions(isDev) {
