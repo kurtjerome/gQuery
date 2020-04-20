@@ -17,8 +17,10 @@ const typeDefs = gql`
     type DOMNode {
         html: String
         text: String
-        attr(name: String!): String
         val: String
+        attr(name: String!): String
+        first(query: String!): DOMNode
+        find(query: String!): [DOMNode]
     }
 `
 
@@ -42,11 +44,17 @@ const resolvers = {
         text: (g, _args, { cheerio }) => {
             return cheerio(g).text()
         },
+        val: (g, _args, { cheerio }) => {
+            return cheerio(g).val()
+        },
         attr: (g, { name }, { cheerio }) => {
             return cheerio(g).attr(name)
         },
-        val: (g, _args, { cheerio }) => {
-            return cheerio(g).val()
+        find: (g, { query }, { cheerio }) => {
+            return cheerio(g).find(query).toArray()
+        },
+        first: (g, { query }, { cheerio }) => {
+            return cheerio(g).find(query).first()
         },
     },
 }
