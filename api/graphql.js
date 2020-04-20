@@ -3,6 +3,7 @@ import cheerio from "cheerio"
 
 import { getHTML } from "./_chromium"
 
+const cors = require("micro-cors")()
 const isDev = process.env.NOW_REGION === "dev1"
 
 const typeDefs = gql`
@@ -76,7 +77,7 @@ exports.config = {
     api: { bodyParser: false },
 }
 
-module.exports = (req, res, ...args) => {
+module.exports = cors((req, res, ...args) => {
     if (req.method === "OPTIONS") {
         return res.status(200).send()
     }
@@ -84,4 +85,4 @@ module.exports = (req, res, ...args) => {
     const handler = server.createHandler({ path: "/api" })
 
     return handler(req, res, ...args)
-}
+})
