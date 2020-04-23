@@ -20,6 +20,7 @@
         "chrome-aws-lambda": "^2.1.1",
         "graphql": "^15.0.0",
         "micro-cors": "^0.1.1",
+        "node-fetch": "^2.6.0",
         "puppeteer-core": "^2.1.1"
     },
     "prettier": {

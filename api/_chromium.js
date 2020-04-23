@@ -1,12 +1,16 @@
 import chrome from "chrome-aws-lambda"
 import puppeteer from "puppeteer-core"
 
-export async function getHTML({ url, isDev }) {
+export async function getHTML({ url, waitFor, isDev }) {
     const options = await getOptions(isDev)
     const browser = await puppeteer.launch(options)
 
     const page = await browser.newPage()
     await page.goto(url)
+
+    if (waitFor) {
+        await page.mainFrame().waitForSelector(waitFor)
+    }
 
     const html = await page.evaluate(() => document.documentElement.innerHTML)
 
